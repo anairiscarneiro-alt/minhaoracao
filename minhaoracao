@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Minha Oração</title>
+<style>
+:root{--bg:#f6f0e1;--card:#fbf7ec;--ink:#3b2a1e;--soft:#6e5a48;--gold:#9c7a38;--line:#d9c9a3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1812;--card:#272018;--ink:#eadfc9;--soft:#b9a98f;--gold:#c9a860;--line:#4a3d2c}}
+:root[data-theme="dark"]{--bg:#1e1812;--card:#272018;--ink:#eadfc9;--soft:#b9a98f;--gold:#c9a860;--line:#4a3d2c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;font-size:1.05rem;line-height:1.65}
+main{max-width:640px;margin:0 auto;padding:1.2rem 1.2rem 3rem}
+h1{font-weight:400;font-size:2.6rem;letter-spacing:.02em;margin:.2rem 0;text-align:center}
+h2{font-weight:400;font-size:1.6rem;line-height:1.3;margin:.6rem 0 1rem;text-align:center}
+h3{font-weight:600;font-size:1.05rem;margin:1.4rem 0 .4rem}
+p{margin:.6rem 0}
+.sub{text-align:center;color:var(--soft);font-style:italic;margin:0 0 2rem}
+.cross{text-align:center;color:var(--gold);font-size:2rem;margin-top:3rem}
+.rule{border:0;border-top:1px solid var(--gold);width:60px;margin:1.4rem auto}
+.home{text-align:center;padding-top:1rem}
+.stack{display:flex;flex-direction:column;gap:.8rem;max-width:320px;margin:0 auto}
+.btn{font:inherit;font-size:1rem;background:transparent;color:var(--ink);border:1px solid var(--gold);padding:.65rem 1.1rem;border-radius:3px;cursor:pointer}
+.btn.primary{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.btn:hover{border-color:var(--ink)}
+.btn:focus-visible,.link:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.link{font:inherit;background:none;border:0;color:var(--soft);cursor:pointer;text-decoration:underline;padding:.3rem 0}
+.top{display:flex;justify-content:space-between;align-items:center;color:var(--soft);font-size:.95rem}
+.dots{display:flex;gap:.5rem;justify-content:center;margin:.8rem 0}
+.dots i{width:8px;height:8px;border-radius:50%;border:1px solid var(--gold)}
+.dots i.on{background:var(--gold)}
+.guide{text-align:center;font-style:italic;color:var(--soft)}
+.prayer{border-left:2px solid var(--gold);padding:.2rem 0 .2rem 1rem;margin:1.2rem 0;white-space:pre-line}
+ul.q{padding-left:1.2rem;color:var(--soft)}
+textarea,input[type=text],input[type=number]{font:inherit;width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:.6rem}
+textarea{min-height:110px;resize:vertical}
+.note{font-size:.9rem;color:var(--soft);border-top:1px solid var(--line);padding-top:.7rem;margin-top:1.2rem}
+.timer{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1.2rem;margin:1.8rem 0;text-align:center}
+.clock{font-size:3rem;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.msg{min-height:1.6rem;color:var(--gold);font-style:italic}
+.row{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin:.6rem 0}
+.mins{display:inline-flex;gap:.5rem;align-items:center;font-size:.95rem;color:var(--soft);margin-top:.4rem}
+.mins input{width:4.5rem;text-align:center}
+.nav{display:flex;gap:.6rem;justify-content:space-between;flex-wrap:wrap}
+.items{list-style:none;padding:0;margin:.4rem 0}
+.items li{display:flex;justify-content:space-between;gap:.6rem;border-bottom:1px solid var(--line);padding:.4rem 0}
+.x{background:none;border:0;color:var(--soft);font-size:1.3rem;cursor:pointer;line-height:1}
+.add{display:flex;gap:.5rem}
+.add .btn{white-space:nowrap}
+details{background:var(--card);border:1px solid var(--line);border-radius:4px;margin:.7rem 0;padding:.2rem 1rem}
+summary{cursor:pointer;padding:.6rem 0;font-size:1.1rem;list-style:none;display:flex;justify-content:space-between}
+summary::-webkit-details-marker{display:none}
+.ptext{white-space:pre-line;font-size:calc(1.05rem*var(--f,1));line-height:1.75}
+.tools{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:1rem 0}
+.read{position:fixed;inset:0;background:var(--bg);z-index:20;overflow:auto;padding:calc(1.5rem + env(safe-area-inset-top,0px)) 1.5rem calc(1.5rem + env(safe-area-inset-bottom,0px));text-align:center}
+.read .ptext{max-width:34rem;margin:1.5rem auto;font-size:calc(1.3rem*var(--f,1))}
+.set{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-bottom:1px solid var(--line);padding:.7rem 0}
+.set input{width:5rem;text-align:center}
+.end{text-align:center;padding-top:3rem}
+</style></head><body><main id="app"></main>
+<script>
+const PRAYERS=[
+{id:"cruz",n:"Sinal da Cruz",t:"Em nome do Pai, e do Filho, e do Espírito Santo. Amém."},
+{id:"pai",n:"Pai-Nosso",t:"Pai nosso, que estais nos céus,\nsantificado seja o vosso nome,\nvenha a nós o vosso reino,\nseja feita a vossa vontade\nassim na terra como no céu.\nO pão nosso de cada dia nos dai hoje,\nperdoai-nos as nossas ofensas\nassim como nós perdoamos a quem nos tem ofendido,\ne não nos deixeis cair em tentação,\nmas livrai-nos do mal.\nAmém."},
+{id:"ave",n:"Ave-Maria",t:"Ave, Maria, cheia de graça, o Senhor é convosco,\nbendita sois vós entre as mulheres\ne bendito é o fruto do vosso ventre, Jesus.\nSanta Maria, Mãe de Deus,\nrogai por nós, pecadores,\nagora e na hora da nossa morte.\nAmém."},
+{id:"gloria",n:"Glória ao Pai",t:"Glória ao Pai, ao Filho e ao Espírito Santo.\nComo era no princípio, agora e sempre.\nAmém."},
+{id:"credo",n:"Credo — Símbolo dos Apóstolos",nota:"Este é o Símbolo dos Apóstolos. O Credo Niceno-Constantinopolitano é outra profissão de fé, mais longa, usada na liturgia da Missa; não é a mesma oração.",t:"Creio em Deus Pai todo-poderoso, criador do céu e da terra.\nE em Jesus Cristo, seu único Filho, nosso Senhor,\nque foi concebido pelo poder do Espírito Santo,\nnasceu da Virgem Maria,\npadeceu sob Pôncio Pilatos,\nfoi crucificado, morto e sepultado;\ndesceu à mansão dos mortos,\nressuscitou ao terceiro dia,\nsubiu aos céus,\nestá sentado à direita de Deus Pai todo-poderoso,\ndonde há de vir a julgar os vivos e os mortos.\nCreio no Espírito Santo,\nna santa Igreja Católica,\nna comunhão dos santos,\nna remissão dos pecados,\nna ressurreição da carne,\nna vida eterna.\nAmém."},
+{id:"salve",n:"Salve-Rainha",t:"Salve, Rainha, Mãe de misericórdia,\nvida, doçura e esperança nossa, salve!\nA vós bradamos, os degredados filhos de Eva;\na vós suspiramos, gemendo e chorando neste vale de lágrimas.\nEia, pois, advogada nossa,\nesses vossos olhos misericordiosos a nós volvei;\ne depois deste desterro mostrai-nos Jesus,\nbendito fruto do vosso ventre,\nó clemente, ó piedosa, ó doce sempre Virgem Maria.\nRogai por nós, santa Mãe de Deus,\npara que sejamos dignos das promessas de Cristo.\nAmém."},
+{id:"anjo",n:"Santo Anjo do Senhor",t:"Santo Anjo do Senhor,\nmeu zeloso guardador,\nse a ti me confiou a piedade divina,\nsempre me rege, me guarda, me governa, me ilumina.\nAmém."}];
+const ATO="Meu Deus, eu me arrependo, de todo o coração, de vos ter ofendido, porque sois infinitamente bom e amável, e o pecado vos desagrada. Proponho firmemente, com o auxílio da vossa graça, não mais pecar e fugir das ocasiões de pecado. Senhor, tende piedade de mim, pecador. Amém.";
+const NAMES=["Sinal da Cruz e Preparação","Ação de Graças","Exame de Consciência e Pedido de Perdão","Oração de Petição e Intercessão","Orações Tradicionais","Conclusão"];
+const DEF=[1,5,5,5,5,1];
+const KEY="minhaoracao";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=ms=>{const s=Math.ceil(ms/1000);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function load(){const d={times:DEF.slice(),gratitude:"",exam:"",intentions:[],intercessions:[],done:{},font:1};
+ try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==="object")Object.assign(d,s);}catch(e){}
+ if(!Array.isArray(d.times)||d.times.length!==6)d.times=DEF.slice();return d}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load();
+let R={view:"home",i:0,start:null,active:false,ato:false,reading:null,open:{}};
+let T=null,iv=null;
+function resetTimer(){clearInterval(iv);const m=S.times[R.i]*60000;T={total:m,rem:m,end:0,running:false,fin:false,started:false}}
+function tickUI(){const c=$("#clock");if(c&&T)c.textContent=fmt(T.rem)}
+function tick(){T.rem=Math.max(0,T.end-Date.now());if(T.rem<=0){T.rem=0;T.running=false;T.fin=true;clearInterval(iv);render()}else tickUI()}
+function startT(){T.end=Date.now()+T.rem;T.running=true;T.started=true;R.active=true;if(!R.start)R.start=Date.now();clearInterval(iv);iv=setInterval(tick,250);render()}
+function pauseT(){T.rem=Math.max(0,T.end-Date.now());T.running=false;clearInterval(iv);render()}
+function go(n){if(n<0||n>5)return;R.i=n;R.ato=false;resetTimer();render();window.scrollTo(0,0)}
+function begin(){R.view="step";R.start=null;R.active=false;R.open={};go(0)}
+function home(){if(R.active&&!confirm("Sair da oração em andamento? Suas anotações e intenções ficam salvas."))return;clearInterval(iv);R.view="home";R.active=false;R.start=null;render()}
+function finish(){clearInterval(iv);R.dur=R.start?Date.now()-R.start:0;R.view="end";R.active=false;render();window.scrollTo(0,0)}
+function dots(n){return`<div class="dots" aria-hidden="true">${[0,1,2,3,4,5].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}</div>`}
+function homeView(){return`<div class="home"><div class="cross" style="margin-top:2rem">✝</div><h1>Minha Oração</h1><p class="sub">Um momento com Deus</p>${dots(-1)}<div class="stack" style="margin-top:2rem"><button class="btn primary" data-act="begin">Iniciar oração</button><button class="btn" data-act="settings">Configurar tempos</button></div><p class="note" style="margin-top:3rem">Uma rotina de oração pessoal em seis etapas. Não é uma liturgia oficial da Igreja.</p></div>`}
+function settingsView(){return`<header class="top"><button class="link" data-act="back">Voltar</button><span></span></header><h2>Tempo de cada etapa</h2><p class="guide">Em minutos. Estes tempos são sugestões, não obrigações religiosas.</p>${NAMES.map((n,k)=>`<label class="set"><span>${n}</span><input type="number" min="1" max="60" value="${S.times[k]}" data-time="${k}"></label>`).join("")}`}
+function endView(){const m=Math.floor(R.dur/60000),s=Math.floor(R.dur%60000/1000);return`<div class="end"><div class="cross" style="margin-top:0">✝</div><h2>Que a paz de Cristo acompanhe você.</h2><hr class="rule"><p class="guide">Duração da oração: ${m} min ${s} s</p><div class="stack" style="margin-top:2rem"><button class="btn primary" data-act="gohome">Voltar à tela inicial</button></div></div>`}
+function list(kind,label,ph){return`<h3>${label}</h3><ul class="items">${S[kind].map((x,k)=>`<li><span>${esc(x)}</span><button class="x" data-act="del" data-kind="${kind}" data-k="${k}" aria-label="Remover">×</button></li>`).join("")}</ul><div class="add"><input type="text" id="in-${kind}" placeholder="${ph}" maxlength="200" data-kind="${kind}"><button class="btn" data-act="add" data-kind="${kind}">Adicionar</button></div>`}
+function pcard(p,k){return`<details data-id="${p.id}" ${R.open[p.id]?"open":""}><summary><span>${esc(p.n)}</span><span>${S.done[p.id]?"✓":""}</span></summary>${p.nota?`<p class="note" style="border:0;margin:0">${p.nota}</p>`:""}<div class="ptext prayer" style="border:0;padding:0">${esc(p.t)}</div><div class="row"><button class="btn" data-act="done" data-id="${p.id}">${S.done[p.id]?"Desmarcar":"Marcar como concluída"}</button></div></details>`}
+const BODY=[
+()=>`<p class="guide">Coloque-se na presença de Deus. Acalme o coração, deixe de lado as distrações e disponha-se a rezar.</p><div class="prayer">Em nome do Pai, e do Filho, e do Espírito Santo. Amém.</div>`,
+()=>`<p class="guide">Reconheça os dons de Deus em sua vida. Agradeça pela vida, pela família, pelas pessoas que ama, pelas oportunidades e pelas pequenas graças do cotidiano.</p><ul class="q"><li>Pelo que sou grato hoje?</li><li>Quais graças recebi e talvez não tenha percebido?</li><li>Em quais momentos reconheço a presença e a bondade de Deus?</li></ul><h3>Meus agradecimentos (opcional)</h3><textarea data-note="gratitude" placeholder="Escreva se desejar…">${esc(S.gratitude)}</textarea>`,
+()=>`<p class="guide">Examine seu dia à luz dos mandamentos de Deus e do ensinamento de Cristo. Reconheça suas faltas com sinceridade, arrependa-se e peça a graça de uma verdadeira conversão.</p><ul class="q"><li>Faltei à caridade com alguém?</li><li>Fui impaciente, injusto ou orgulhoso?</li><li>Deixei de cumprir algum dever?</li><li>O que preciso corrigir ou reparar?</li></ul><h3>Minhas reflexões (opcional)</h3><textarea data-note="exam" placeholder="Escreva se desejar…">${esc(S.exam)}</textarea><div class="row"><button class="btn" data-act="ato">${R.ato?"Ocultar":"Exibir"} o Ato de Contrição</button></div>${R.ato?`<div class="prayer">${esc(ATO)}</div><p class="note" style="margin-top:0">Esta é uma das formas tradicionais do Ato de Contrição; existem outras versões em uso.</p>`:""}<p class="note">A oração pessoal não substitui o sacramento da Penitência e Reconciliação, quando este é necessário.</p>`,
+()=>`<p class="guide">Apresente suas necessidades a Deus com confiança. Reze por sua família, pelos amigos, pelos que sofrem, pelos enfermos, pelos falecidos e também por aqueles com quem você tem dificuldades.</p><p><b>Petição:</b> apresentar a Deus as próprias necessidades espirituais e materiais.<br><b>Intercessão:</b> rezar pelas necessidades de outras pessoas.</p>${list("intentions","Minhas intenções","Adicionar intenção")}${list("intercessions","Pessoas e situações pelas quais desejo rezar","Adicionar pessoa ou situação")}<p class="note">Rezamos com confiança, entregando tudo à vontade de Deus; a oração não garante que os pedidos sejam atendidos exatamente como desejamos.</p>`,
+()=>{const n=PRAYERS.filter(p=>S.done[p.id]).length;return`<p class="guide">Consulte as orações abaixo conforme desejar. Nem todas precisam ser rezadas em cada momento de oração.</p><div class="tools"><button class="btn" data-act="font" data-d="-0.1" aria-label="Diminuir letra">A−</button><button class="btn" data-act="font" data-d="0.1" aria-label="Aumentar letra">A+</button><button class="btn" data-act="read" data-k="0">Modo leitura</button><span style="color:var(--soft)">${n} de ${PRAYERS.length} concluídas</span></div><div style="--f:${S.font}">${PRAYERS.map(pcard).join("")}</div>`},
+()=>`<p class="guide">Encerre este momento confiando sua vida, seu dia e suas intenções à providência de Deus.</p><div class="prayer">Em nome do Pai, e do Filho, e do Espírito Santo. Amém.</div>`];
+function timerCard(){const t=T;let b="";
+ if(!t.started)b=`<button class="btn primary" data-act="start">Iniciar oração</button>`;
+ else{b=t.running?`<button class="btn" data-act="pause">Pausar</button>`:(t.fin?"":`<button class="btn primary" data-act="start">Retomar</button>`);b+=`<button class="btn" data-act="restart">Reiniciar</button>`}
+ return`<div class="timer"><div class="clock" id="clock">${fmt(t.rem)}</div><div class="msg" role="status">${t.fin?"O tempo terminou. Continue rezando ou siga adiante.":""}</div><div class="row">${b}</div><label class="mins">Minutos<input type="number" min="1" max="60" value="${S.times[R.i]}" data-cur="1"></label></div>`}
+function stepView(){const last=R.i===5;
+ return`<header class="top"><button class="link" data-act="home">Início</button><span>Etapa ${R.i+1} de 6</span></header>${dots(R.i)}<h2>${NAMES[R.i]}</h2>${BODY[R.i]()}${timerCard()}<nav class="nav"><button class="btn" data-act="prev" ${R.i===0?"disabled style='opacity:.4'":""}>Etapa anterior</button>${last?`<button class="btn primary" data-act="finish">Finalizar oração</button>`:`<button class="btn primary" data-act="next">Próxima etapa</button>`}</nav>`}
+function reader(){const p=PRAYERS[R.reading];return`<div class="read" style="--f:${S.font}"><div class="row"><button class="btn" data-act="rclose">Fechar</button><button class="btn" data-act="font" data-d="-0.1">A−</button><button class="btn" data-act="font" data-d="0.1">A+</button></div><h2>${esc(p.n)}</h2><div class="ptext">${esc(p.t)}</div><div class="row"><button class="btn" data-act="rprev" ${R.reading===0?"disabled style='opacity:.4'":""}>Anterior</button><button class="btn" data-act="done" data-id="${p.id}">${S.done[p.id]?"Desmarcar":"Marcar como concluída"}</button><button class="btn" data-act="rnext" ${R.reading===PRAYERS.length-1?"disabled style='opacity:.4'":""}>Seguinte</button></div></div>`}
+function render(){const v=R.view;const h=v==="home"?homeView():v==="settings"?settingsView():v==="end"?endView():stepView();$("#app").innerHTML=h+(R.reading!==null?reader():"")}
+function add(kind){const el=$("#in-"+kind);const v=el&&el.value.trim();if(!v)return;S[kind].push(v);save();render();$("#in-"+kind).focus()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act,d=b.dataset;
+ if(a==="begin")begin();else if(a==="settings"){R.view="settings";render()}else if(a==="back"||a==="gohome"){R.view="home";render()}
+ else if(a==="home")home();else if(a==="start")startT();else if(a==="pause")pauseT();else if(a==="restart"){resetTimer();render()}
+ else if(a==="next")go(R.i+1);else if(a==="prev")go(R.i-1);else if(a==="finish")finish();else if(a==="ato"){R.ato=!R.ato;render()}
+ else if(a==="add")add(d.kind);else if(a==="del"){S[d.kind].splice(+d.k,1);save();render()}
+ else if(a==="done"){S.done[d.id]=!S.done[d.id];save();render()}
+ else if(a==="font"){S.font=Math.min(1.8,Math.max(.9,Math.round((S.font+ +d.d)*10)/10));save();render()}
+ else if(a==="read"){R.reading=0;render()}else if(a==="rclose"){R.reading=null;render()}
+ else if(a==="rprev"){R.reading--;render()}else if(a==="rnext"){R.reading++;render()}});
+document.addEventListener("input",e=>{const el=e.target;
+ if(el.dataset.note){S[el.dataset.note]=el.value;save()}});
+document.addEventListener("change",e=>{const el=e.target;if(el.type!=="number")return;
+ const v=Math.min(60,Math.max(1,Math.round(+el.value)||1));el.value=v;
+ if(el.dataset.time!==undefined){S.times[+el.dataset.time]=v;save()}
+ else if(el.dataset.cur){S.times[R.i]=v;save();const nt=v*60000;
+  if(!T.started)resetTimer();else if(!T.fin){const dl=nt-T.total;T.total=nt;if(T.running)T.end=Math.max(Date.now(),T.end+dl);else T.rem=Math.max(0,T.rem+dl)}
+  render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id&&e.target.id.startsWith("in-"))add(e.target.dataset.kind);
+ if(e.key==="Escape"&&R.reading!==null){R.reading=null;render()}});
+document.addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.id)R.open[d.dataset.id]=d.open},true);
+window.addEventListener("beforeunload",e=>{if(R.active){e.preventDefault();e.returnValue=""}});
+resetTimer();render();
+</script></body></html>
